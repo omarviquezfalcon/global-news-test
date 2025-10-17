@@ -1,0 +1,19 @@
+{
+  "name": "global-news-cypress-tests",
+  "version": "1.0.0",
+  "description": "Automated tests for Global News Project",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run",
+    "setup": "node setup.js",
+    "install:all": "npm install && node setup.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0"
+  },
+  "keywords": ["cypress", "testing", "automation", "news"],
+  "author": "Test Automation",
+  "license": "MIT"
+}
