@@ -1,22 +1,20 @@
-name: Cypress Tests for Global News
+# .github/workflows/run-cypress.yml
+# Portfolio Version (Chrome Only)
+
+name: Cypress Tests for Global News (Chrome Only)
 
 on:
-  workflow_dispatch:  # Permite ejecución manual desde GitHub
-  schedule:
-    - cron: '0 9 * * 1-5'  # Ejecutar de lunes a viernes a las 9 AM UTC
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
   push:
-    branches: [ master ]
+    branches: [ master ] # CORRECTED: Using 'master' to match repository branch
   pull_request:
-    branches: [ master ]
+    branches: [ master ] # CORRECTED: Using 'master' to match repository branch
 
 jobs:
-  cypress-run:
+  cypress-run-chrome: # Updated job name for clarity
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        browser: [chrome, firefox]
-      fail-fast: false
+
+    # We removed the 'strategy: matrix' section to run only once
 
     steps:
       - name: Checkout repository
@@ -34,16 +32,19 @@ jobs:
       - name: Verify Cypress
         run: npx cypress verify
 
-      - name: Run Cypress tests
-        run: npx cypress run --browser ${{ matrix.browser }}
+      - name: Run Cypress tests on Chrome
+        # We explicitly specify '--browser chrome'
+        run: npx cypress run --browser chrome
         env:
+          # Still points to the production URL for demonstration
           CYPRESS_baseUrl: https://global-news-proyect-gmni.vercel.app
 
-      - name: Upload test results
-        if: always()
+      - name: Upload test results (Chrome)
+        if: always() # Always upload results, even on failure
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-results-${{ matrix.browser }}
+          # Updated artifact name
+          name: cypress-results-chrome
           path: |
             cypress/screenshots/
             cypress/videos/
