@@ -1,0 +1,53 @@
+{
+    "folders": [
+        {
+            "name": "🧪 Multi-Framework Test Suite",
+            "path": "."
+        },
+        {
+            "name": "🐍 Python Tests",
+            "path": "./selenium-python"
+        },
+        {
+            "name": "☕ Java Tests", 
+            "path": "./selenium-java"
+        },
+        {
+            "name": "🌲 Cypress Tests",
+            "path": "./cypress"
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "./selenium-python/venv/Scripts/python.exe",
+        "java.configuration.workspaces": ["selenium-java"],
+        "cypress.codeLens.enabled": true,
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/target": true,
+            "**/__pycache__": true,
+            "**/venv": true,
+            "**/allure-results": true,
+            "**/allure-report": true,
+            "**/cypress-allure-report": true,
+            "**/cypress/videos": true,
+            "**/cypress/screenshots": true
+        },
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/target": true,
+            "**/__pycache__": true,
+            "**/venv": true,
+            "**/allure-results": true,
+            "**/allure-report": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "vscjava.vscode-java-pack",
+            "shelex.vscode-cy-helper",
+            "ms-vscode.test-adapter-converter",
+            "hbenl.vscode-test-explorer"
+        ]
+    }
+}

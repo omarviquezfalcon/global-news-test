@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="SeleniumJavaInfrastructureTest" verbose="1" parallel="false">
+    <parameter name="browser" value="chrome"/>
+    <parameter name="headless" value="false"/>
+    
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+    
+    <!-- Infrastructure Tests - Testing Selenium Java setup -->
+    <test name="InfrastructureTests">
+        <groups>
+            <run>
+                <include name="infrastructure"/>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.InfrastructureTest"/>
+        </classes>
+    </test>
+    
+</suite>

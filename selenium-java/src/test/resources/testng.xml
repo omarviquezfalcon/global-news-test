@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="GlobalNewsSeleniumSuite" verbose="1" parallel="classes" thread-count="3">
+    <parameter name="browser" value="chrome"/>
+    <parameter name="headless" value="false"/>
+    
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+    
+    <!-- Smoke Tests - Critical functionality -->
+    <test name="SmokeTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.BasicTest">
+                <methods>
+                    <include name="testPageLoads"/>
+                    <include name="testBasicElementsExist"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testPageTitleCorrect"/>
+                    <include name="testMainHeadingVisible"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.GlobeInteractionTest">
+                <methods>
+                    <include name="testGlobeLoads"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.NewsPanelStatesTest">
+                <methods>
+                    <include name="testNewsSectionExists"/>
+                    <include name="testNewsSectionLoadingState"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Regression Tests - Full functionality -->
+    <test name="RegressionTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.BasicTest"/>
+            <class name="com.globalnews.tests.PageLoadElementsTest"/>
+            <class name="com.globalnews.tests.GlobeInteractionTest"/>
+            <class name="com.globalnews.tests.NewsPanelStatesTest"/>
+        </classes>
+    </test>
+    
+    <!-- UI Tests - Interface and interaction focused -->
+    <test name="UITests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="ui"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testElementsExistAndVisible"/>
+                    <include name="testElementsHaveCorrectAttributes"/>
+                    <include name="testPageMetadata"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.GlobeInteractionTest">
+                <methods>
+                    <include name="testGlobeContainerExists"/>
+                    <include name="testGlobeInteractionCapabilities"/>
+                    <include name="testGlobeSearchFunctionality"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Search Tests - Search functionality focused -->
+    <test name="SearchTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="search"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testSearchInputFunctionality"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.GlobeInteractionTest">
+                <methods>
+                    <include name="testGlobeSearchFunctionality"/>
+                    <include name="testGlobeKeyboardNavigation"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- News Tests - News panel functionality -->
+    <test name="NewsTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="news"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.NewsPanelStatesTest"/>
+        </classes>
+    </test>
+    
+    <!-- Performance Tests - Loading and responsiveness -->
+    <test name="PerformanceTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="performance"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.BasicTest">
+                <methods>
+                    <include name="testPageLoadTime"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testPagePerformanceMetrics"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Responsive Tests - Cross-device functionality -->
+    <test name="ResponsiveTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="responsive"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testResponsiveDesign"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.NewsPanelStatesTest">
+                <methods>
+                    <include name="testNewsSectionResponsiveness"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Loading Tests - Loading states and persistence -->
+    <test name="LoadingTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="loading"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.PageLoadElementsTest">
+                <methods>
+                    <include name="testElementLoadingStates"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.NewsPanelStatesTest">
+                <methods>
+                    <include name="testNewsSectionLoadingState"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Persistence Tests - State management -->
+    <test name="PersistenceTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="persistence"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.GlobeInteractionTest">
+                <methods>
+                    <include name="testGlobeStatePersistence"/>
+                </methods>
+            </class>
+            <class name="com.globalnews.tests.NewsPanelStatesTest">
+                <methods>
+                    <include name="testNewsSectionPersistenceDuringInteractions"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Consistency Tests - Content and behavior consistency -->
+    <test name="ConsistencyTests" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="consistency"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.globalnews.tests.NewsPanelStatesTest">
+                <methods>
+                    <include name="testNewsSectionContentConsistency"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,136 @@
+name: 🧪 Multi-Framework Test Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  python-tests:
+    name: 🐍 Python Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install Python dependencies
+      run: |
+        cd selenium-python
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run Python tests
+      run: |
+        cd selenium-python
+        python -m pytest tests/ -v --html=reports/selenium_report.html --self-contained-html
+        
+    - name: Upload Python test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: python-test-results
+        path: selenium-python/reports/
+
+  java-tests:
+    name: ☕ Java Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Run Java tests
+      run: |
+        cd selenium-java
+        mvn clean test -Dtest=SeleniumJavaTestSuite
+        
+    - name: Upload Java test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: java-test-results
+        path: selenium-java/target/surefire-reports/
+
+  cypress-tests:
+    name: 🌲 Cypress Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Cypress tests
+      uses: cypress-io/github-action@v6
+      with:
+        start: npm run start:ci
+        wait-on: 'https://global-news-proyect-gmni.vercel.app'
+        wait-on-timeout: 120
+        browser: chrome
+        headless: true
+        
+    - name: Upload Cypress videos
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: cypress-videos
+        path: cypress/videos/
+
+  deploy-reports:
+    name: 📊 Deploy Reports
+    needs: [python-tests, java-tests, cypress-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      
+    - name: Setup Node.js for report generation
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install Allure
+      run: |
+        npm install -g allure-commandline
+        
+    - name: Generate consolidated report
+      run: |
+        # Create reports directory
+        mkdir -p github-pages
+        cp dashboard.html github-pages/index.html
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./github-pages
